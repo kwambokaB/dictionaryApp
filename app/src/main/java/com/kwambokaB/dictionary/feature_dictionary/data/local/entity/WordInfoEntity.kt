@@ -9,7 +9,6 @@ import com.kwambokaB.dictionary.feature_dictionary.domain.model.WordInfo
 data class WordInfoEntity(
     val meanings: List<Meaning>,
     val phonetic: String,
-    val origin: String,
     val word: String,
     @PrimaryKey val id:Int? = null
 ){
@@ -17,7 +16,6 @@ data class WordInfoEntity(
         return WordInfo(
             meanings = meanings,
             word = word,
-            origin = origin,
             phonetic = phonetic
         )
     }

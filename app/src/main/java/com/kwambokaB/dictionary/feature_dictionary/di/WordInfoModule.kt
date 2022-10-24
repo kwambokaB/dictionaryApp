@@ -3,6 +3,7 @@ package com.kwambokaB.dictionary.feature_dictionary.di
 import android.app.Application
 import androidx.room.Room
 import com.google.gson.Gson
+import com.kwambokaB.dictionary.feature_dictionary.data.local.Converters
 import com.kwambokaB.dictionary.feature_dictionary.data.local.WordInfoDB
 import com.kwambokaB.dictionary.feature_dictionary.data.local.WordInfoDao
 import com.kwambokaB.dictionary.feature_dictionary.data.remote.DictionaryApi
@@ -21,23 +22,25 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object WordInfoModule {
-@Provides
-@Singleton
-fun provideGetWordInfoUseCase(repository: WordInfoRepository): GetWordInfo{
-    return GetWordInfo(repository)
-}
+
     @Provides
     @Singleton
-    fun provideWordInfoRepository(dao: WordInfoDao, api: DictionaryApi): WordInfoRepository{
-        return WordInfoRepositoryImpl(api, dao)
+    fun provideGetWordInfoUseCase(repository: WordInfoRepository): GetWordInfo{
+        return GetWordInfo(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideWordInfoRepository(db: WordInfoDB, api: DictionaryApi): WordInfoRepository{
+        return WordInfoRepositoryImpl(api, db.dao)
     }
 
     @Provides
     @Singleton
-    fun provideDataBase(app:Application): WordInfoDB{
+    fun provideInfoDataBase(app:Application): WordInfoDB{
         return  Room.databaseBuilder(
             app, WordInfoDB::class.java, "word_db"
-        ).addTypeConverter(GsonParser(Gson()))
+        ).addTypeConverter(Converters(GsonParser(Gson())))
+            .fallbackToDestructiveMigration()
             .build()
     }
 

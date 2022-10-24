@@ -7,7 +7,7 @@ import com.kwambokaB.dictionary.feature_dictionary.data.local.entity.WordInfoEnt
 
 @Database(
     entities = [WordInfoEntity::class],
-    version = 1
+    version = 2
 )
 
 @TypeConverters(Converters::class)
